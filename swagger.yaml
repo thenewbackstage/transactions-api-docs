@@ -101,11 +101,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  uuid:
-                    type: string
-                    example: TODO
+                $ref: '#/components/schemas/PaginatedEntityProducts'
         '401':
           description: Usuário não autenticado
         '403':
@@ -176,7 +172,20 @@ paths:
                 properties:
                   token:
                     type: string
-                    example: TODO
+                    example: spiLkeOFZiIyJMCdQ47USLM8ueFqkOB13MKrljwk39157341
+                  user:
+                    type: object
+                    properties:
+                      uuid:
+                        type: string
+                        format: uuid
+                        example: 0191f93c-d5eb-7b01-aecb-55396d8ef852
+                      name: 
+                        type: string
+                        example: Nome do Usuário
+                      email: 
+                        type: string
+                        example: usuario@entidade.com
         '401':
           description: Credenciais inválidas
 components:
@@ -233,6 +242,15 @@ components:
               type: array
               items: 
                 $ref: '#/components/schemas/Entity'
+    PaginatedEntityProducts:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/EntityProduct'
     PaginatedEvents:
       allOf:
         - $ref: '#/components/schemas/PaginatedResponse'
@@ -282,27 +300,36 @@ components:
           type: string
           example: Nome do Evento
         reference_date:
-          example: TODO
+          type: string
+          format: date
+          example: "2024-01-01"
         start:  
-          example: TODO
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
         finish:
-          example: TODO
+          type: string
+          example: "2024-01-01T13:00:00.000000Z"
         operation_start:
-          example: TODO
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
         operation_finish:
-          example: TODO
+          type: string
+          example: "2024-01-01T13:00:00.000000Z"
         created_at:
           type: string
-          example: "2024-01-01 12:00:00"
+          example: "2024-01-01T12:00:00.000000Z"
         updated_at:
           type: string
-          example: "2024-01-01 12:00:00"
+          example: "2024-01-01T12:00:00.000000Z"
         reference_hour:
-          example: TODO
+          type: string
+          example: "12:00:00"
         open_at:
-          example: TODO
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
         close_at:
-          example: TODO
+          type: string
+          example: "2024-01-01T13:00:00.000000Z"
         event_type:
           $ref: '#/components/schemas/ChildEventType'
         place:
@@ -349,7 +376,7 @@ components:
         entity_product_subcategory_uuid:
           type: string
           format: uuid
-          example: TODO
+          example: 0191f929-ccca-706f-97ea-ee2084759668
         product_brand_uuid:
           type: string
           format: uuid
@@ -372,9 +399,15 @@ components:
           type: string
           example: "2024-01-01T12:00:00.000000Z"
         unitary_volume:
-          example: TODO
+          type: number
+          format: float
+          example: 500
         unit_of_measurement:
-          example: TODO
+          type: string
+          enum:
+            - ML
+            - G
+            - UNID
         entity_product_category:
           $ref: '#/components/schemas/EntityProductCategory'
         entity_product_subcategory:
@@ -397,16 +430,16 @@ components:
           example: Nome da Sessão
         start:
           type: string
-          example: "2024-01-01 11:00:00"
+          example: "2024-01-01T11:00:00.000000Z"
         finish:
           type: string
-          example: "2024-01-01 13:00:00"
+          example: "2024-01-01T13:00:00.000000Z"
         created_at:
           type: string
-          example: "2024-01-01 12:00:00"
+          example: "2024-01-01T10:00:00.000000Z"
         updated_at:
           type: string
-          example: "2024-01-01 12:00:00"
+          example: "2024-01-01T10:00:00.000000Z"
     Place:
       type: object
       properties:
@@ -495,9 +528,21 @@ components:
           type: string
           format: uuid
           example: 0191f2fa-c1d4-7ae3-85be-da58f0164d73
+        provider:
+          type: string
+          enum:
+            - ZIG
+            - CSV
         name:
           type: string
           example: Nome da Fonte de Transações
+        synced_until:
+          type: string
+          description: Data até onde a integração foi varrida para realizar a sincronização. Não significa que a última transação terá o cadastro nesse valor visto que podem existir ranges de data e hora onde não existam transações.
+          example: "2024-01-01T12:00:00.000000Z"
+        is_active:
+          type: boolean
+          example: true
         created_at:
           type: string
           example: "2024-01-01T12:00:00.000000Z"
@@ -562,7 +607,9 @@ components:
           type: string
           example: "0YY7FCU8EBVXHI"
         total_value:
-          example: TODO
+          type: number
+          format: float
+          example: 3.18
         transaction_items:
           type: array
           items:
@@ -593,14 +640,6 @@ components:
         entity_product: 
           $ref: '#/components/schemas/EntityProduct'
   securitySchemes:
-    petstore_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
-          scopes:
-            write:pets: modify pets in your account
-            read:pets: read your pets
     bearerAuth:
       type: http
       scheme: bearer
