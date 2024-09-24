@@ -34,6 +34,13 @@ paths:
           schema:
             type: number
             default: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: number
+            default: 15
+            maximum: 15
       responses:
         '200':
           description: Requisição realizada com sucesso
@@ -64,6 +71,20 @@ paths:
             type: string
             format: uuid
             example: 0191eea5-c009-7788-a78d-ecd0322e215f
+        - name: page
+          in: query
+          description: Página de registros desejada
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: number
+            default: 15
+            maximum: 15
       responses:
         '200':
           description: Requisição realizada com sucesso
@@ -95,6 +116,20 @@ paths:
             type: string
             format: uuid
             example: 0191eea5-c009-7788-a78d-ecd0322e215f
+        - name: page
+          in: query
+          description: Página de registros desejada
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: number
+            default: 15
+            maximum: 15
       responses:
         '200':
           description: Requisição realizada com sucesso
@@ -126,6 +161,20 @@ paths:
             type: string
             format: uuid
             example: 0191f2fa-c1d4-7ae3-85be-da58f0164d73
+        - name: page
+          in: query
+          description: Página de registros desejada
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: number
+            default: 500
+            maximum: 500 
       responses:
         '200':
           description: Requisição realizada com sucesso
@@ -411,7 +460,7 @@ components:
         entity_product_category:
           $ref: '#/components/schemas/EntityProductCategory'
         entity_product_subcategory:
-          example: TOOD
+          $ref: '#/components/schemas/EntityProductSubcategory'
         product_brand:
           $ref: '#/components/schemas/ProductBrand'
         product_packaging:
@@ -521,6 +570,14 @@ components:
         updated_at:
           type: string
           example: "2024-01-01T12:00:00.000000Z"
+    EntityProductSubcategory:
+      allOf:
+        - $ref: '#/components/schemas/EntityProductCategory'
+        - type: object
+          properties:
+            name: 
+              type: string
+              example: Nome da Subcategoria de Produto
     TransactionSource:
       type: object
       properties:
@@ -610,6 +667,15 @@ components:
           type: number
           format: float
           example: 3.18
+        created_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+        processed_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+        updated_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
         transaction_items:
           type: array
           items:
