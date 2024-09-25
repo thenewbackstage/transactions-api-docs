@@ -151,7 +151,7 @@ paths:
     get:
       tags:
         - transaction
-      summary: Lista de Transações de uma Fonte de Transações
+      summary: Lista de Transações de uma Fonte de Transações ordernadas por data de processamento
       parameters:
         - name: transactionSourceUuid
           in: path
@@ -175,6 +175,36 @@ paths:
             type: number
             default: 500
             maximum: 500 
+        - name: min_processed_at
+          in: query
+          description: Data e hora mínima de processamento da transação
+          required: false
+          schema:
+            type: string
+          examples:
+            dateTime:
+              value: "2024-09-16 21:20:05"
+            dateTimeWithMilliseconds:
+              value: "2024-09-16 21:17:05.000"
+            dateTimeWithTimezone:
+              value: "2024-09-16T18:17:05 UTC"
+            dateTimeWithMillisecondsAndTimezone:
+              value: "2024-09-16 18:17:05.000 -0300"
+        - name: max_processed_at
+          in: query
+          description: Data e hora máxima de processamento da transação
+          required: false
+          schema:
+            type: string
+          examples:
+            dateTime:
+              value: "2024-09-16 21:20:05"
+            dateTimeWithMilliseconds:
+              value: "2024-09-16 21:17:05.000"
+            dateTimeWithTimezone:
+              value: "2024-09-16T18:17:05 UTC"
+            dateTimeWithMillisecondsAndTimezone:
+              value: "2024-09-16 18:17:05.000 -0300"
       responses:
         '200':
           description: Requisição realizada com sucesso
