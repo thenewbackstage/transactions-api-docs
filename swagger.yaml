@@ -34,13 +34,6 @@ paths:
           schema:
             type: number
             default: 1
-        - name: limit
-          in: query
-          required: false
-          schema:
-            type: number
-            default: 15
-            maximum: 15
       responses:
         '200':
           description: Requisição realizada com sucesso
@@ -71,20 +64,6 @@ paths:
             type: string
             format: uuid
             example: 0191eea5-c009-7788-a78d-ecd0322e215f
-        - name: page
-          in: query
-          description: Página de registros desejada
-          required: false
-          schema:
-            type: number
-            default: 1
-        - name: limit
-          in: query
-          required: false
-          schema:
-            type: number
-            default: 15
-            maximum: 15
       responses:
         '200':
           description: Requisição realizada com sucesso
@@ -116,20 +95,6 @@ paths:
             type: string
             format: uuid
             example: 0191eea5-c009-7788-a78d-ecd0322e215f
-        - name: page
-          in: query
-          description: Página de registros desejada
-          required: false
-          schema:
-            type: number
-            default: 1
-        - name: limit
-          in: query
-          required: false
-          schema:
-            type: number
-            default: 15
-            maximum: 15
       responses:
         '200':
           description: Requisição realizada com sucesso
@@ -151,7 +116,7 @@ paths:
     get:
       tags:
         - transaction
-      summary: Lista de Transações de uma Fonte de Transações ordernadas por data de processamento
+      summary: Lista de Transações de uma Fonte de Transações
       parameters:
         - name: transactionSourceUuid
           in: path
@@ -161,50 +126,6 @@ paths:
             type: string
             format: uuid
             example: 0191f2fa-c1d4-7ae3-85be-da58f0164d73
-        - name: page
-          in: query
-          description: Página de registros desejada
-          required: false
-          schema:
-            type: number
-            default: 1
-        - name: limit
-          in: query
-          required: false
-          schema:
-            type: number
-            default: 500
-            maximum: 500 
-        - name: min_processed_at
-          in: query
-          description: Data e hora mínima de processamento da transação
-          required: false
-          schema:
-            type: string
-          examples:
-            dateTime:
-              value: "2024-09-16 21:20:05"
-            dateTimeWithMilliseconds:
-              value: "2024-09-16 21:17:05.000"
-            dateTimeWithTimezone:
-              value: "2024-09-16T18:17:05 UTC"
-            dateTimeWithMillisecondsAndTimezone:
-              value: "2024-09-16 18:17:05.000 -0300"
-        - name: max_processed_at
-          in: query
-          description: Data e hora máxima de processamento da transação
-          required: false
-          schema:
-            type: string
-          examples:
-            dateTime:
-              value: "2024-09-16 21:20:05"
-            dateTimeWithMilliseconds:
-              value: "2024-09-16 21:17:05.000"
-            dateTimeWithTimezone:
-              value: "2024-09-16T18:17:05 UTC"
-            dateTimeWithMillisecondsAndTimezone:
-              value: "2024-09-16 18:17:05.000 -0300"
       responses:
         '200':
           description: Requisição realizada com sucesso
@@ -409,6 +330,28 @@ components:
         close_at:
           type: string
           example: "2024-01-01T13:00:00.000000Z"
+        metatada:
+          type: object
+          properties:
+            id_gsh:
+              type: object
+              properties:
+                label:
+                  type: string
+                  example: "id gsh"
+                value: 
+                  type: string
+                  example: "16"
+            id_allianz:
+              type: object
+              properties:
+                label:
+                  type: string
+                  example: "id allianz"
+                value: 
+                  type: string
+                  example: "1234_12345"
+                  
         event_type:
           $ref: '#/components/schemas/ChildEventType'
         place:
@@ -490,7 +433,7 @@ components:
         entity_product_category:
           $ref: '#/components/schemas/EntityProductCategory'
         entity_product_subcategory:
-          $ref: '#/components/schemas/EntityProductSubcategory'
+          example: TOOD
         product_brand:
           $ref: '#/components/schemas/ProductBrand'
         product_packaging:
@@ -600,14 +543,6 @@ components:
         updated_at:
           type: string
           example: "2024-01-01T12:00:00.000000Z"
-    EntityProductSubcategory:
-      allOf:
-        - $ref: '#/components/schemas/EntityProductCategory'
-        - type: object
-          properties:
-            name: 
-              type: string
-              example: Nome da Subcategoria de Produto
     TransactionSource:
       type: object
       properties:
@@ -697,15 +632,6 @@ components:
           type: number
           format: float
           example: 3.18
-        created_at:
-          type: string
-          example: "2024-01-01T12:00:00.000000Z"
-        processed_at:
-          type: string
-          example: "2024-01-01T12:00:00.000000Z"
-        updated_at:
-          type: string
-          example: "2024-01-01T12:00:00.000000Z"
         transaction_items:
           type: array
           items:
