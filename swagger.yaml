@@ -112,7 +112,7 @@ paths:
           description: Parâmetros de busca inválidos
       security:
         - bearerAuth: []
-  /transactionSources/{transactionSourceUuid}/transactions:
+  /transaction-sources/{transactionSourceUuid}/transactions:
     get:
       tags:
         - transaction
