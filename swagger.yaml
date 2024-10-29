@@ -180,10 +180,10 @@ paths:
                         type: string
                         format: uuid
                         example: 0191f93c-d5eb-7b01-aecb-55396d8ef852
-                      name: 
+                      name:
                         type: string
                         example: Nome do Usuário
-                      email: 
+                      email:
                         type: string
                         example: usuario@entidade.com
         '401':
@@ -193,7 +193,7 @@ components:
     PaginatedResponse:
       type: object
       properties:
-        total: 
+        total:
           type: integer
           format: int32
           example: 50
@@ -240,7 +240,7 @@ components:
           properties:
             data:
               type: array
-              items: 
+              items:
                 $ref: '#/components/schemas/Entity'
     PaginatedEntityProducts:
       allOf:
@@ -258,7 +258,7 @@ components:
           properties:
             data:
               type: array
-              items: 
+              items:
                 $ref: '#/components/schemas/Event'
     PaginatedTransactions:
       allOf:
@@ -267,7 +267,7 @@ components:
           properties:
             data:
               type: array
-              items: 
+              items:
                 $ref: '#/components/schemas/Transaction'
     Entity:
       type: object
@@ -276,7 +276,7 @@ components:
           type: string
           format: uuid
           example: 0191eea5-c009-7788-a78d-ecd0322e215f
-        type: 
+        type:
           type: string
           description: Define se a entidade é PF ou PJ
           enum:
@@ -296,14 +296,14 @@ components:
           type: string
           format: uuid
           example: 0191eecd-3dec-7aae-a398-5f9290ce1db1
-        name: 
+        name:
           type: string
           example: Nome do Evento
         reference_date:
           type: string
           format: date
           example: "2024-01-01"
-        start:  
+        start:
           type: string
           example: "2024-01-01T12:00:00.000000Z"
         finish:
@@ -339,7 +339,7 @@ components:
                 label:
                   type: string
                   example: "id gsh"
-                value: 
+                value:
                   type: string
                   example: "16"
             id_allianz:
@@ -348,10 +348,10 @@ components:
                 label:
                   type: string
                   example: "id allianz"
-                value: 
+                value:
                   type: string
                   example: "1234_12345"
-                  
+
         event_type:
           $ref: '#/components/schemas/ChildEventType'
         place:
@@ -387,7 +387,7 @@ components:
     EntityProduct:
       type: object
       properties:
-        uuid: 
+        uuid:
           type: string
           format: uuid
           example: 0191f3ef-a2b5-7324-b8c9-22c87be1f384
@@ -406,14 +406,14 @@ components:
         product_packaging_uuid:
           type: string
           format: uuid
-          example: 0191f406-1caa-7985-b201-038b3cddce42          
+          example: 0191f406-1caa-7985-b201-038b3cddce42
         product_type_uuid:
           type: string
           format: uuid
           example: 0191f3ff-d96c-78af-9209-74a7aeb0ae44
         name:
           type: string
-          example: Nome do Produto 
+          example: Nome do Produto
         created_at:
           type: string
           example: "2024-01-01T12:00:00.000000Z"
@@ -485,7 +485,7 @@ components:
           type: string
           format: uuid
           example: 0191f404-dadf-7447-ace7-c67f400b80b3
-        name: 
+        name:
           type: string
           example: Nome da Marca do Produto
         created_at:
@@ -503,7 +503,7 @@ components:
           example: 0191f406-1caa-7985-b201-038b3cddce42
         name:
           type: string
-          description: Nome da Embalagem (Lata; Caixa; etc) 
+          description: Nome da Embalagem (Lata; Caixa; etc)
           example: Lata
         created_at:
           type: string
@@ -518,7 +518,7 @@ components:
           type: string
           format: uuid
           example: 0191f3ff-d96c-78af-9209-74a7aeb0ae44
-        name: 
+        name:
           type: string
           example: Tipo de Produto
         created_at:
@@ -610,7 +610,7 @@ components:
         operator:
           type: string
           example: "00006647"
-        point_of_sale_type: 
+        point_of_sale_type:
           type: string
           description: Tipo de PDV (Operacional, Produção, Reembolso)
           example: Operacional
@@ -632,10 +632,23 @@ components:
           type: number
           format: float
           example: 3.18
+        payment_methods:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionPaymentMethods'
         transaction_items:
           type: array
           items:
             $ref: '#/components/schemas/TransactionItem'
+    TransactionPaymentMethods:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 5
+        description:
+          type: string
+          example: Zig Cashless
     TransactionItem:
       type: object
       properties:
@@ -655,11 +668,11 @@ components:
           type: number
           format: float
           example: 1.59
-        value: 
+        value:
           type: number
           format: float
           example: 3.18
-        entity_product: 
+        entity_product:
           $ref: '#/components/schemas/EntityProduct'
   securitySchemes:
     bearerAuth:
