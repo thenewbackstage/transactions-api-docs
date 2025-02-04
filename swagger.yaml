@@ -117,7 +117,7 @@ paths:
   /entities/{entityUuid}/point-of-sales:
     get:
       tags:
-        - transaction
+        - point of sale
       summary: Lista de pontos de venda de uma entidade
       parameters:
         - name: entityUuid
