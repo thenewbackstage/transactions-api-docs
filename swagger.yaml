@@ -2,10 +2,12 @@ openapi: 3.0.3
 info:
   title: Data Wise - API de Transações
   description: |-
-    API para realizar busca de dados de entidades, eventos e suas transações.
+    API para realizar busca de dados de entidades, eventos e suas transações. 
+
+    **Última atualização:** 04 de Fevereiro de 2025
   contact:
     email: contato@tnb.live
-  version: "0.1"
+  version: "0.2"
 servers:
   - url: https://api.datawise.cloud/bi
 tags:
@@ -102,6 +104,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedEntityProducts'
+        '401':
+          description: Usuário não autenticado
+        '403':
+          description: Sem permissão de acesso
+        '404':
+          description: Entidade não encontrada
+        '422':
+          description: Parâmetros de busca inválidos
+      security:
+        - bearerAuth: []
+  /entities/{entityUuid}/point-of-sales:
+    get:
+      tags:
+        - transaction
+      summary: Lista de pontos de venda de uma entidade
+      parameters:
+        - name: entityUuid
+          in: path
+          description: O uuid da entidade
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 0191eea5-c009-7788-a78d-ecd0322e215f
+      responses:
+        '200':
+          description: Requisição realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEntityPointOfSales'
         '401':
           description: Usuário não autenticado
         '403':
@@ -251,6 +284,15 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/EntityProduct'
+    PaginatedEntityPointOfSales:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/PointOfSale'
     PaginatedEvents:
       allOf:
         - $ref: '#/components/schemas/PaginatedResponse'
@@ -289,6 +331,76 @@ components:
           type: string
           format: uri
           example: https://api.datawise.cloud/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png
+    PointOfSale:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 0191eea5-c009-7788-a78d-ecd0322e215f
+        code:
+          type: string
+          example: Código do ponto de venda
+        name:
+          type: string
+          example: Nome do ponto de venda
+        created_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+        updated_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+        is_active:
+          type: boolean
+          example: true
+        description:
+          type: string
+          example: Testeira do ponto de venda
+        type:
+          type: string
+          example: Tipo do ponto de venda
+        plant:
+          type: number
+          example: Planta do ponto de venda
+        footage:
+          type: number
+          example: Metragem do ponto de venda
+        terminals:
+          type: number
+          example: Quantidade de terminais do ponto de venda
+        provider:
+          type: string
+          example: Sistema do ponto de venda
+        provider_code:
+          type: string
+          example: Código do ponto de venda da fonte de transação
+        provider_name:
+          type: string
+          example: Nome do ponto de venda da fonte de transação
+        provider_attributes:
+          type: object
+          example: Dados extras relacionado a fonte de transação
+          properties:
+            printing_ways:
+              type: number
+              example: Quantidade de vias para impressão
+            receive_advance:
+              type: boolean
+              example: Recebe adiantamento
+        area:
+          $ref: '#/components/schemas/EventArea'
+        sector:
+          $ref: '#/components/schemas/EventSector'
+        function:
+          $ref: '#/components/schemas/Function'
+        modality:
+          $ref: '#/components/schemas/Modality'
+        acquirer:
+          $ref: '#/components/schemas/Acquirer'
+        supplier:
+          $ref: '#/components/schemas/Supplier'
+        payment_methods:
+          $ref: '#/components/schemas/PaymentMethod'
     Event:
       type: object
       properties:
@@ -384,6 +496,66 @@ components:
             name:
               type: string
               example: Nome do Subtipo de Evento
+    EventProduct:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 0191f3ef-a2b5-7324-b8c9-22c87be1f384
+        event_product_category_uuid:
+          type: string
+          format: uuid
+          example: 0191f403-cafe-7fed-8501-08aa8ba382b1
+        event_product_subcategory_uuid:
+          type: string
+          format: uuid
+          example: 0191f929-ccca-706f-97ea-ee2084759668
+        product_brand_uuid:
+          type: string
+          format: uuid
+          example: 0191f404-dadf-7447-ace7-c67f400b80b3
+        product_packaging_uuid:
+          type: string
+          format: uuid
+          example: 0191f406-1caa-7985-b201-038b3cddce42
+        product_type_uuid:
+          type: string
+          format: uuid
+          example: 0191f3ff-d96c-78af-9209-74a7aeb0ae44
+        name:
+          type: string
+          example: Nome do Produto
+        created_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+        updated_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+        unitary_volume:
+          type: number
+          format: float
+          example: 500
+        unit_of_measurement:
+          type: string
+          enum:
+            - ML
+            - G
+            - UNID
+        event_product_category:
+          $ref: '#/components/schemas/ProductCategory'
+        event_product_subcategory:
+          example: TOOD
+        product_brand:
+          $ref: '#/components/schemas/ProductBrand'
+        product_packaging:
+          $ref: '#/components/schemas/ProductPackaging'
+        product_type:
+          $ref: '#/components/schemas/ProductType'
+        entity_products:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityProduct'
     EntityProduct:
       type: object
       properties:
@@ -431,7 +603,7 @@ components:
             - G
             - UNID
         entity_product_category:
-          $ref: '#/components/schemas/EntityProductCategory'
+          $ref: '#/components/schemas/ProductCategory'
         entity_product_subcategory:
           example: TOOD
         product_brand:
@@ -462,6 +634,168 @@ components:
         updated_at:
           type: string
           example: "2024-01-01T10:00:00.000000Z"
+    EventArea:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 0191eed7-8de7-761c-af44-bbf672b7114c
+        name:
+          type: string
+          example: Nome da Área
+        code:
+          type: string
+          example: Código da Área
+        created_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+        updated_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+    EventSector:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 0191eed7-8de7-761c-af44-bbf672b7114c
+        name:
+          type: string
+          example: Nome do Setor
+        code:
+          type: string
+          example: Código do Setor
+        created_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+        updated_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+    Function:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 0191eed7-8de7-761c-af44-bbf672b7114c
+        name:
+          type: string
+          example: Nome da Função
+        code:
+          type: string
+          example: Código da Função
+        created_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+        updated_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+    Modality:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 0191eed7-8de7-761c-af44-bbf672b7114c
+        name:
+          type: string
+          example: Nome da Modalidade
+        created_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+        updated_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+    Acquirer:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 0191eed7-8de7-761c-af44-bbf672b7114c
+        name:
+          type: string
+          example: Nome da Adquirência
+        created_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+        updated_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+    PaymentMethod:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 0191eed7-8de7-761c-af44-bbf672b7114c
+        name:
+          type: string
+          example: Nome da Forma de pagamento
+        aggregator:
+          type: string
+          example: Agregador da Forma de pagamento
+        abbreviation:
+          type: string
+          example: Abreviação da Forma de pagamento
+        created_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+        updated_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentMethodSource'
+    PaymentMethodSource:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 0191eed7-8de7-761c-af44-bbf672b7114c
+        name:
+          type: string
+          example: Nome da Forma de pagamento no Provider
+        provider:
+          type: string
+          example: Sistema
+        external_id:
+          type: string
+          example: Código da Forma de pagamento no Provider
+        created_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+        updated_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+    Supplier:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 0191eed7-8de7-761c-af44-bbf672b7114c
+        document_type:
+          type: string
+          example: Tipo do documento do Fornecedor
+        document_number:
+          type: string
+          example: Número do documento do Fornecedor
+        name:
+          type: string
+          example: Nome fantasia do Fornecedor
+        corporate_name:
+          type: string
+          example: Razão social do Fornecedor
+        created_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+        updated_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
     Place:
       type: object
       properties:
@@ -488,6 +822,9 @@ components:
         name:
           type: string
           example: Nome da Marca do Produto
+        industry:
+          type: string
+          example: Nome da Indústria do Produto
         created_at:
           type: string
           example: "2024-01-01T12:00:00.000000Z"
@@ -528,6 +865,22 @@ components:
           type: string
           example: "2024-01-01T12:00:00.000000Z"
     EntityProductCategory:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 0191f403-cafe-7fed-8501-08aa8ba382b1
+        name:
+          type: string
+          example: Nome da Categoria de Produto
+        created_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+        updated_at:
+          type: string
+          example: "2024-01-01T12:00:00.000000Z"
+    ProductCategory:
       type: object
       properties:
         uuid:
@@ -610,13 +963,10 @@ components:
         operator:
           type: string
           example: "00006647"
-        point_of_sale_type:
-          type: string
-          description: Tipo de PDV (Operacional, Produção, Reembolso)
-          example: Operacional
         point_of_sale_code:
           type: string
-          example: "000935"
+          format: uuid
+          example: 0191f302-7541-7f8f-9ca3-e5b78d11bf15
         point_of_sale_name:
           type: string
           example: Nome do PDV
@@ -656,7 +1006,7 @@ components:
           type: string
           format: uuid
           example: 0191f31c-aa49-7cbc-b1c7-1344e9f46660
-        entity_product_uuid:
+        event_product_uuid:
           type: string
           format: uuid
           example: 0191f3ef-a2b5-7324-b8c9-22c87be1f384
@@ -672,8 +1022,8 @@ components:
           type: number
           format: float
           example: 3.18
-        entity_product:
-          $ref: '#/components/schemas/EntityProduct'
+        event_product:
+          $ref: '#/components/schemas/EventProduct'
   securitySchemes:
     bearerAuth:
       type: http
