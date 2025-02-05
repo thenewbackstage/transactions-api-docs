@@ -353,54 +353,32 @@ components:
         is_active:
           type: boolean
           example: true
-        description:
-          type: string
-          example: Testeira do ponto de venda
-        type:
-          type: string
-          example: Tipo do ponto de venda
         plant:
           type: number
           example: Planta do ponto de venda
+        area:
+          $ref: '#/components/schemas/EventArea'
+        type:
+          type: string
+          example: Tipo do ponto de venda
+        function:
+          $ref: '#/components/schemas/Function'
+        description:
+          type: string
+          example: Testeira do ponto de venda
+        supplier:
+          $ref: '#/components/schemas/Supplier'
         footage:
           type: number
           example: Metragem do ponto de venda
         terminals:
           type: number
           example: Quantidade de terminais do ponto de venda
+        acquirer:
+          $ref: '#/components/schemas/Acquirer'
         provider:
           type: string
           example: Sistema do ponto de venda
-        provider_code:
-          type: string
-          example: Código do ponto de venda da fonte de transação
-        provider_name:
-          type: string
-          example: Nome do ponto de venda da fonte de transação
-        provider_attributes:
-          type: object
-          example: Dados extras relacionado a fonte de transação
-          properties:
-            printing_ways:
-              type: number
-              example: Quantidade de vias para impressão
-            receive_advance:
-              type: boolean
-              example: Recebe adiantamento
-        area:
-          $ref: '#/components/schemas/EventArea'
-        sector:
-          $ref: '#/components/schemas/EventSector'
-        function:
-          $ref: '#/components/schemas/Function'
-        modality:
-          $ref: '#/components/schemas/Modality'
-        acquirer:
-          $ref: '#/components/schemas/Acquirer'
-        supplier:
-          $ref: '#/components/schemas/Supplier'
-        payment_methods:
-          $ref: '#/components/schemas/PaymentMethod'
     Event:
       type: object
       properties:
@@ -545,7 +523,7 @@ components:
         event_product_category:
           $ref: '#/components/schemas/ProductCategory'
         event_product_subcategory:
-          example: TOOD
+          $ref: '#/components/schemas/ProductCategory'
         product_brand:
           $ref: '#/components/schemas/ProductBrand'
         product_packaging:
@@ -605,7 +583,7 @@ components:
         entity_product_category:
           $ref: '#/components/schemas/ProductCategory'
         entity_product_subcategory:
-          example: TOOD
+          $ref: '#/components/schemas/ProductCategory'
         product_brand:
           $ref: '#/components/schemas/ProductBrand'
         product_packaging:
@@ -647,6 +625,8 @@ components:
         code:
           type: string
           example: Código da Área
+        sector:
+          $ref: '#/components/schemas/EventSector'
         created_at:
           type: string
           example: "2024-01-01T12:00:00.000000Z"
