@@ -188,7 +188,7 @@ paths:
             schema:
               type: object
               properties:
-                username:
+                email:
                   type: string
                   format: email
                   example: usuario@entidade.com
@@ -943,13 +943,13 @@ components:
         operator:
           type: string
           example: "00006647"
+        point_of_sale_type:
+          type: string
+          example: Tipo do PDV
         point_of_sale_code:
           type: string
           format: uuid
           example: 0191f302-7541-7f8f-9ca3-e5b78d11bf15
-        point_of_sale_name:
-          type: string
-          example: Nome do PDV
         register_date:
           type: string
           example: "2024-01-01 12:01:00"
