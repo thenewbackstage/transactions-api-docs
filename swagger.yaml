@@ -11,6 +11,8 @@ info:
 servers:
   - url: https://api.datawise.cloud/bi
 tags:
+  - name: auth
+    description: Autenticação-
   - name: entity
     description: Entidades/empresas
   - name: event
@@ -19,9 +21,52 @@ tags:
     description: Produtos
   - name: transaction
     description: Transações
-  - name: auth
-    description: Autenticação
 paths:
+  /login:
+    post:
+      tags:
+        - auth
+      summary: Logs user into the system
+      description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: usuario@entidade.com
+                password:
+                  type: string
+                  example: 123456
+      responses:
+        '200':
+          description: Requisição realizada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: spiLkeOFZiIyJMCdQ47USLM8ueFqkOB13MKrljwk39157341
+                  user:
+                    type: object
+                    properties:
+                      uuid:
+                        type: string
+                        format: uuid
+                        example: 0191f93c-d5eb-7b01-aecb-55396d8ef852
+                      name:
+                        type: string
+                        example: Nome do Usuário
+                      email:
+                        type: string
+                        example: usuario@entidade.com
+        '401':
+          description: Credenciais inválidas
   /entities:
     get:
       tags:
@@ -176,51 +221,6 @@ paths:
           description: Parâmetros de busca inválidos
       security:
         - bearerAuth: []
-  /login:
-    post:
-      tags:
-        - auth
-      summary: Logs user into the system
-      description: ''
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  format: email
-                  example: usuario@entidade.com
-                password:
-                  type: string
-                  example: 123456
-      responses:
-        '200':
-          description: Requisição realizada com sucesso
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    example: spiLkeOFZiIyJMCdQ47USLM8ueFqkOB13MKrljwk39157341
-                  user:
-                    type: object
-                    properties:
-                      uuid:
-                        type: string
-                        format: uuid
-                        example: 0191f93c-d5eb-7b01-aecb-55396d8ef852
-                      name:
-                        type: string
-                        example: Nome do Usuário
-                      email:
-                        type: string
-                        example: usuario@entidade.com
-        '401':
-          description: Credenciais inválidas
 components:
   schemas:
     PaginatedResponse:
