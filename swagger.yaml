@@ -12,7 +12,7 @@ servers:
   - url: https://api.datawise.cloud/bi
 tags:
   - name: auth
-    description: Autenticação-
+    description: Autenticação
   - name: entity
     description: Entidades/empresas
   - name: event
@@ -21,6 +21,8 @@ tags:
     description: Produtos
   - name: transaction
     description: Transações
+  - name: point of sale
+    description: Pontos de venda
 paths:
   /login:
     post:
