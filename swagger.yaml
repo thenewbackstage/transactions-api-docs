@@ -535,7 +535,33 @@ components:
         entity_products:
           type: array
           items:
-            $ref: '#/components/schemas/EntityProduct'
+            $ref: '#/components/schemas/EventEntityProduct'
+    EventEntityProduct:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 0191f3ef-a2b5-7324-b8c9-22c87be1f384
+        name:
+          type: string
+          example: Nome do Produto
+        quantity:
+          type: integer
+          example: 1
+        value_proportion_percent:
+          type: integer
+          example: 100
+        unitary_volume:
+          type: number
+          format: float
+          example: 500
+        unit_of_measurement:
+          type: string
+          enum:
+            - ML
+            - G
+            - UNID
     EntityProduct:
       type: object
       properties:
@@ -936,6 +962,15 @@ components:
           type: string
           example: "2024-01-01 12:00:00"
         date:
+          type: string
+          example: "2024-01-01 11:59:50"
+        created_at:
+          type: string
+          example: "2024-01-01 11:59:50"
+        update_at:
+          type: string
+          example: "2024-01-01 11:59:50"
+        processed_at:
           type: string
           example: "2024-01-01 11:59:50"
         operation:
