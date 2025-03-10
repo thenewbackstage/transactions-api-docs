@@ -4,7 +4,7 @@ info:
   description: |-
     API para realizar busca de dados de entidades, eventos e suas transações. 
 
-    **Última atualização:** 28 de Fevereiro de 2025
+    **Última atualização:** 10 de Março de 2025
   contact:
     email: contato@tnb.live
   version: "0.2"
@@ -13,16 +13,12 @@ servers:
 tags:
   - name: auth
     description: Autenticação
-  - name: entity
-    description: Entidades/empresas
-  - name: event
-    description: Eventos
   - name: product
     description: Produtos
+  - name: entity
+    description: Entidades/empresas
   - name: transaction
     description: Transações
-  - name: point of sale
-    description: Pontos de venda
 paths:
   /login:
     post:
@@ -69,6 +65,78 @@ paths:
                         example: usuario@entidade.com
         '401':
           description: Credenciais inválidas
+  /products/brands:
+    get:
+      tags:
+        - product
+      summary: Lista de marcas
+      description: Lista paginada de marcas
+      parameters:
+        - name: page
+          in: query
+          description: Página de registros desejada
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: where[uuid]
+          in: query
+          description: Filtro pelo uuid da marca
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Requisição realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductBrands'
+        '401':
+          description: Usuário não autenticado
+        '403':
+          description: Sem permissão de acesso
+        '422':
+          description: Parâmetros de busca inválidos
+      security:
+        - bearerAuth: []
+  /products/packagings:
+    get:
+      tags:
+        - product
+      summary: Lista de embalagens
+      description: Lista paginada de embalagens
+      parameters:
+        - name: page
+          in: query
+          description: Página de registros desejada
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: where[uuid]
+          in: query
+          description: Filtro pelo uuid da embalagem
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Requisição realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductPackagings'
+        '401':
+          description: Usuário não autenticado
+        '403':
+          description: Sem permissão de acesso
+        '422':
+          description: Parâmetros de busca inválidos
+      security:
+        - bearerAuth: []
   /entities:
     get:
       tags:
@@ -83,6 +151,13 @@ paths:
           schema:
             type: number
             default: 1
+        - name: where[uuid]
+          in: query
+          description: Filtro pelo uuid da entidade
+          required: false
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
           description: Requisição realizada com sucesso
@@ -101,7 +176,7 @@ paths:
   /entities/{entityUuid}/events:
     get:
       tags:
-        - event
+        - entity
       summary: Lista de eventos da entidade
       description: Lista paginada de eventos com dados sobre seu tipo, local, sessões e fontes de transação
       parameters:
@@ -112,7 +187,20 @@ paths:
           schema:
             type: string
             format: uuid
-            example: 0191eea5-c009-7788-a78d-ecd0322e215f
+        - name: page
+          in: query
+          description: Página de registros desejada
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: where[uuid]
+          in: query
+          description: Filtro pelo uuid do evento
+          required: false
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
           description: Requisição realizada com sucesso
@@ -133,7 +221,7 @@ paths:
   /entities/{entityUuid}/products:
     get:
       tags:
-        - product
+        - entity
       summary: Lista de produtos da entidade
       parameters:
         - name: entityUuid
@@ -144,6 +232,20 @@ paths:
             type: string
             format: uuid
             example: 0191eea5-c009-7788-a78d-ecd0322e215f
+        - name: page
+          in: query
+          description: Página de registros desejada
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: where[uuid]
+          in: query
+          description: Filtro pelo uuid do produto da entidade
+          required: false
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
           description: Requisição realizada com sucesso
@@ -164,8 +266,8 @@ paths:
   /entities/{entityUuid}/point-of-sales:
     get:
       tags:
-        - point of sale
-      summary: Lista de pontos de venda de uma entidade
+        - entity
+      summary: Lista de pontos de venda da entidade
       parameters:
         - name: entityUuid
           in: path
@@ -175,6 +277,20 @@ paths:
             type: string
             format: uuid
             example: 0191eea5-c009-7788-a78d-ecd0322e215f
+        - name: page
+          in: query
+          description: Página de registros desejada
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: where[uuid]
+          in: query
+          description: Filtro pelo uuid do ponto de venda
+          required: false
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
           description: Requisição realizada com sucesso
@@ -206,6 +322,20 @@ paths:
             type: string
             format: uuid
             example: 0191f2fa-c1d4-7ae3-85be-da58f0164d73
+        - name: page
+          in: query
+          description: Página de registros desejada
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: where[uuid]
+          in: query
+          description: Filtro pelo uuid da transação
+          required: false
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
           description: Requisição realizada com sucesso
@@ -268,6 +398,24 @@ components:
           type: integer
           format: int32
           example: 15
+    PaginatedProductBrands:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProductBrand'
+    PaginatedProductPackagings:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProductPackaging'
     PaginatedEntities:
       allOf:
         - $ref: '#/components/schemas/PaginatedResponse'
