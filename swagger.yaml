@@ -4,10 +4,10 @@ info:
   description: |-
     API para realizar busca de dados de entidades, eventos e suas transações. 
 
-    **Última atualização:** 10 de Março de 2025
+    **Última atualização:** 02 de Junho de 2025
   contact:
     email: contato@tnb.live
-  version: "0.2"
+  version: "0.3"
 servers:
   - url: https://api.datawise.cloud/bi
 tags:
@@ -353,6 +353,51 @@ paths:
           description: Parâmetros de busca inválidos
       security:
         - bearerAuth: []
+  /transaction-sources/{transactionSourceUuid}/transactions/clients:
+    get:
+      tags:
+        - transaction
+      summary: Lista de clientes de cada Transação de uma Fonte de Transações
+      parameters:
+        - name: transactionSourceUuid
+          in: path
+          description: O uuid da Fonte de Transações
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 0191f2fa-c1d4-7ae3-85be-da58f0164d73
+        - name: page
+          in: query
+          description: Página de registros desejada
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: where[uuid]
+          in: query
+          description: Filtro pelo uuid da transação
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Requisição realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTransactionClients'
+        '401':
+          description: Usuário não autenticado
+        '403':
+          description: Sem permissão de acesso
+        '404':
+          description: Fonte de Transações não encontrada
+        '422':
+          description: Parâmetros de busca inválidos
+      security:
+        - bearerAuth: []
 components:
   schemas:
     PaginatedResponse:
@@ -461,6 +506,15 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Transaction'
+    PaginatedTransactionClients:
+      allOf:
+        - $ref: '#/components/schemas/PaginatedResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/TransactionClient'
     Entity:
       type: object
       properties:
@@ -1155,6 +1209,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TransactionItem'
+    TransactionClient:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 0191f302-7541-7f8f-9ca3-e5b78d11bf15
+        date:
+          type: string
+          example: "2024-01-01 11:59:50"
+        processed_at:
+          type: string
+          example: "2024-01-01 11:59:50"
+        client:
+          $ref: '#/components/schemas/ChildTransactionClient'
+        event:
+          $ref: '#/components/schemas/TransactionEvent'
+    ChildTransactionClient:
+      type: object
+      properties:
+        document:
+          type: string
+          example: Número do documento do Cliente
+    TransactionEvent:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 0191f302-7541-7f8f-9ca3-e5b78d11bf15
     TransactionPaymentMethods:
       type: object
       properties:
