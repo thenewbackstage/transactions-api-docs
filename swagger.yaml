@@ -1305,9 +1305,6 @@ components:
         token:
           type: string
           example: Token do número do documento do Ambulante
-        name:
-          type: string
-          example: Nome do Ambulante
     TransactionPaymentMethods:
       type: object
       properties:
