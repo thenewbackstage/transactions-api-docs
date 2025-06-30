@@ -1299,6 +1299,9 @@ components:
         token:
           type: string
           example: Token do número do documento do Cliente
+        document:
+          type: string
+          example: Número do documento do Cliente
     ChildTransactionMobileVendor:
       type: object
       properties:
