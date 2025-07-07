@@ -4,7 +4,7 @@ info:
   description: |-
     API para realizar busca de dados de entidades, eventos e suas transações. 
 
-    **Última atualização:** 26 de Junho de 2025
+    **Última atualização:** 07 de Julho de 2025
   contact:
     email: contato@tnb.live
   version: "0.3"
@@ -322,13 +322,20 @@ paths:
             type: string
             format: uuid
             example: 0191f2fa-c1d4-7ae3-85be-da58f0164d73
-        - name: page
+        - name: min_processed_at
           in: query
-          description: Página de registros desejada
+          description: Filtro pela data mínima de processamento (Y-m-d H:i:s)
           required: false
           schema:
-            type: number
-            default: 1
+            type: string
+            format: date-time
+        - name: max_processed_at
+          in: query
+          description: Filtro pela data máxima de processamento
+          required: false
+          schema:
+            type: string
+            format: date-time
         - name: where[uuid]
           in: query
           description: Filtro pelo uuid da transação
@@ -336,6 +343,20 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: limit
+          in: query
+          description: Limite de registros por página (Máximo 1000)
+          required: false
+          schema:
+            type: number
+            default: 1000
+        - name: page
+          in: query
+          description: Página de registros desejada
+          required: false
+          schema:
+            type: number
+            default: 1
       responses:
         '200':
           description: Requisição realizada com sucesso
